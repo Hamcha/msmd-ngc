@@ -1,0 +1,32 @@
+#statusbar {
+	background: linear-gradient(to bottom, #3c4f61, #2c3c4a);
+	padding: 5pt;
+	display: flex;
+}
+
+#statusbar .portBlock {
+	display: flex;
+	flex-direction: column;
+	border-right: 1px solid rgba(0,0,0,0.2);
+	padding: 5pt;
+}
+
+#statusbar .connectBlock {
+	display: flex;
+}
+
+#statusbar .portBlock .title {
+	font-size: 9pt;
+	padding: 4pt;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#statusbar .right {
+	display: flex;
+	margin-left: auto;
+}
+
+#statusbar button span {
+	line-height: 13pt;
+}

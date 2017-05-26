@@ -1,0 +1,28 @@
+@import "app/Controls.css";
+@import "app/StatusBar.css";
+@import "app/FrameList.css";
+
+html, body, #root, main {
+	height: 100%;
+}
+
+body {
+	background-color: #222c35;
+	background: linear-gradient(to bottom, #162029, #222c35);
+	color: #c8d1d6;
+	font-family: "Source Sans Pro";
+	padding: 0;
+	margin: 0;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+#replay {
+	flex: 1;
+	display: flex;
+	padding: 3pt;
+}

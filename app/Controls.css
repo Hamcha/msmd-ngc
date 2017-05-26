@@ -1,0 +1,40 @@
+button {
+	padding: 6pt;
+	border: 0;
+	margin: 0 2pt;
+	background: linear-gradient(to bottom, #2c3c4a, #222c35);
+	color: #c8d1d6;
+	border-radius: 3px;
+	cursor: pointer;
+	outline: none;
+	text-transform: uppercase;
+	font-size: 8pt;
+}
+
+button:disabled, button:disabled:hover {
+	background: linear-gradient(to bottom, #2c3c4a, #222c35);
+	opacity: 0.5;
+    cursor: inherit;
+}
+
+button:hover {
+	background: linear-gradient(to bottom, #526d84, #344656);
+}
+
+select {
+	padding: 5pt;
+	border: 0;
+	background: linear-gradient(to bottom, #2c3c4a, #222c35);
+	color: #c8d1d6;
+	margin: 0 2pt;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+select:hover {
+	background: linear-gradient(to bottom, #526d84, #344656);
+}
+
+select:disabled {
+	opacity: 0.5;
+}
