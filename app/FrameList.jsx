@@ -1,34 +1,39 @@
 /* @flow */
 
 import React from "react";
+import { observer } from "mobx-react";
+
+import DeviceManager from "./DeviceManager";
+
+type Status = "idle" | "playing" | "recording";
 
 type FrameData = {
-	ID: int;
+	ID: number;
 	ButtonState: {
-		A: bool,
-		B: bool,
-		X: bool,
-		Y: bool,
-		Z: bool,
-		Rb: bool,
-		Lb: bool,
-		Start: bool,
-		PovN: bool,
-		PovW: bool,
-		PovE: bool,
-		PovS: bool
+		A: boolean,
+		B: boolean,
+		X: boolean,
+		Y: boolean,
+		Z: boolean,
+		Rb: boolean,
+		Lb: boolean,
+		Start: boolean,
+		PovN: boolean,
+		PovW: boolean,
+		PovE: boolean,
+		PovS: boolean
 	},
 	ControlStick: {
-		X: int,
-		Y: int
+		X: number,
+		Y: number
 	},
 	CStick: {
-		X: int,
-		Y: int
+		X: number,
+		Y: number
 	},
 	Triggers: {
-		L: int,
-		R: int
+		L: number,
+		R: number
 	}
 };
 
@@ -41,14 +46,25 @@ class FrameItem extends React.Component {
 	}
 }
 
+@observer
 export default class FrameList extends React.Component {
 	state: {
-		frames: FrameData[]
+		frames: FrameData[],
+		currentFrame: number,
+		status: Status
 	} = {
-		frames: []
+		frames: [],
+		currentFrame: -1,
+		recording: false,
+		status: "idle"
 	};
 
+	reset() {
+		this.setState({ frames: [], currentFrame: -1 });
+	}
+
 	render() {
+		let devices = DeviceManager.devices;
 		return <div className="frameList">
 			<nav className="frameMenu">
 				<span className="title">Untitled.tas</span>

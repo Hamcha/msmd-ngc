@@ -2,12 +2,12 @@
 
 import SerialPort from "serialport";
 import EventEmitter from "events";
+import { observable } from "mobx";
 
 import type { portConfig } from "serialport";
 
 export type PortType = "nspy" | "msmd";
-
-let instance: ?DeviceManager = null;
+export type ConnectionStatus = "notconnected" | "connected" | "connecting";
 
 let serialOptions: {[key: PortType]: Object} = {
 	nspy: {
@@ -19,14 +19,42 @@ let serialOptions: {[key: PortType]: Object} = {
 	}
 };
 
-export default class DeviceManager extends EventEmitter {
-	static get instance() {
-		if (instance === null) {
-			instance = new DeviceManager();
-		}
-		return instance;
+class DeviceManager extends EventEmitter {
+	@observable portStatus: {[key: PortType]: ConnectionStatus} = {
+		"nspy": "notconnected",
+		"msmd": "notconnected"
+	};
+	@observable devices: {[key: PortType]: SerialPort} = {};
+
+	connect(type: PortType, path: string) {
+		// Connect and assign to internal array
+		this.devices[type] = new SerialPort(path, serialOptions[type]);
+		this.portStatus[type] = "connecting";
+
+		// Relay events
+		this.relayEvents(type, ["open", "close", "data", "error", "disconnect"]);
+		
+		// Set connected status once opened
+		this.devices[type].once("open", () => {
+			this.portStatus[type] = "connected";
+		});
+		// Remove from device list once connection is lost
+		this.devices[type].once("close", () => {
+			delete(this.devices[type]);
+			this.portStatus[type] = "notconnected";
+		});
 	}
-	static async listPorts(): Promise<portConfig[]> {
+
+	disconnect(type: PortType) {
+		this.devices[type].close();
+	}
+
+	relayEvents(type: PortType, events: string[]) {
+		events.forEach((event) => this.devices[type].on(event, () => this.emit(event, type, this.devices[type])));
+	}
+
+	// Async util methods
+	async listPorts(): Promise<portConfig[]> {
 		return new Promise((resolve, reject) => {
 			SerialPort.list((err, ports) => {
 				if (err) {
@@ -36,19 +64,6 @@ export default class DeviceManager extends EventEmitter {
 			});
 		});
 	}
-	devices: {[key: PortType]: SerialPort} = {};
-	connect(type: PortType, path: string) {
-		this.devices[type] = new SerialPort(path, serialOptions[type]);
-		this.relayEvents(type, "open");
-		this.relayEvents(type, "data");
-		this.relayEvents(type, "close");
-		this.relayEvents(type, "error");
-		this.relayEvents(type, "disconnect");
-	}
-	disconnect(type: PortType) {
-		this.devices[type].close();
-	}
-	relayEvents(type, event) {
-		this.devices[type].on(event, () => this.emit(event, type, this.devices[type]));
-	}
 }
+
+export default new DeviceManager();

@@ -1,32 +1,35 @@
 /* @flow */
 
 import React from "React";
+import { observer } from "mobx-react";
+
 import DeviceManager from "./DeviceManager";
 import { asyncState } from "./JSXUtils";
 
-import type { PortType } from "./DeviceManager";
+import type { PortType, ConnectionStatus } from "./DeviceManager";
 import type { portConfig } from "serialport";
 
-type ConnectionStatus = "notconnected" | "connected" | "connecting";
+type PortData = {
+	name: string,
+	current: string,
+	status: ConnectionStatus
+}
 
 function portName(item: portConfig): string {
 	return `${item.comName} (${item.manufacturer})`;
 }
 
 @asyncState
+@observer
 export default class StatusBar extends React.Component {
 	state: {
 		ports: portConfig[],
 		refreshing: bool,
-		connectNSpyStatus: ConnectionStatus,
-		connectMSMDStatus: ConnectionStatus,
 		currentNSpyPort: ?string,
 		currentMSMDPort: ?string
 	} = {
 		ports: [],
 		refreshing: false,
-		connectNSpyStatus: "notconnected",
-		connectMSMDStatus: "notconnected",
 		currentNSpyPort: null,
 		currentMSMDPort: null
 	};
@@ -35,8 +38,6 @@ export default class StatusBar extends React.Component {
 		super();
 	}
 	componentDidMount() {
-		DeviceManager.instance.on("open", type => this.setPortStatus(type, "connected"));
-		DeviceManager.instance.on("close", type => this.setPortStatus(type, "notconnected"));
 		this.refreshPortList();
 	}
 	async refreshPortList() {
@@ -60,19 +61,6 @@ export default class StatusBar extends React.Component {
 	setCurrentPort(portType: PortType, currentPort: string) {
 		this.setState({ currentPort });
 	}
-	setPortStatus(portType: PortType, status: ConnectionStatus) {
-		switch (portType) {
-			case "nspy":
-				this.setState({ connectNSpyStatus: status });
-				break;
-			case "msmd":
-				this.setState({ connectMSMDStatus: status });
-				break;
-			default:
-				throw "unknown port type: " + portType;
-		}
-		this.refreshPortList();
-	}
 	connect(type: PortType) {
 		let path = "";
 		switch (type) {
@@ -85,23 +73,23 @@ export default class StatusBar extends React.Component {
 			default:
 				throw "unknown port type: " + type;
 		}
-		DeviceManager.instance.connect(type, path);
-		this.setPortStatus(type, "connecting");
+		DeviceManager.connect(type, path);
 	}
 	disconnect(type: PortType) {
-		DeviceManager.instance.disconnect(type);
+		DeviceManager.disconnect(type);
 	}
 	render(): React.ReactElement<any> {
-		let ports: {[key: PortType]: Object} = {
+		let portStatus = DeviceManager.portStatus;
+		let ports: {[key: PortType]: PortData} = {
 			nspy: {
 				name: "NintendoSpy",
 				current: this.state.currentNSpyPort,
-				status: this.state.connectNSpyStatus
+				status: portStatus.nspy
 			},
 			msmd: {
 				name: "MSMD device (NGC)",
 				current: this.state.currentMSMDPort,
-				status: this.state.connectMSMDStatus
+				status: portStatus.msmd
 			}
 		};
 		let portBlock = type => {
