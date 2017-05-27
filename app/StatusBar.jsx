@@ -25,13 +25,13 @@ export default class StatusBar extends React.Component {
 	state: {
 		ports: portConfig[],
 		refreshing: bool,
-		currentNSpyPort: ?string,
-		currentMSMDPort: ?string
+		currentNSpyPort: string,
+		currentMSMDPort: string
 	} = {
 		ports: [],
 		refreshing: false,
-		currentNSpyPort: null,
-		currentMSMDPort: null
+		currentNSpyPort: "",
+		currentMSMDPort: ""
 	};
 
 	constructor() {
@@ -59,10 +59,19 @@ export default class StatusBar extends React.Component {
 		await this.asyncSetState({ ports, currentNSpyPort, currentMSMDPort, refreshing: false });
 	}
 	setCurrentPort(portType: PortType, currentPort: string) {
-		this.setState({ currentPort });
+		switch (portType) {
+			case "nspy":
+				this.setState({ currentNSpyPort: currentPort });
+				break;
+			case "msmd":
+				this.setState({ currentMSMDPort: currentPort });
+				break;
+			default:
+				throw "unknown port type: " + portType;
+		}
 	}
 	connect(type: PortType) {
-		let path = "";
+		let path: string = "";
 		switch (type) {
 			case "nspy":
 				path = this.state.currentNSpyPort;
@@ -78,9 +87,9 @@ export default class StatusBar extends React.Component {
 	disconnect(type: PortType) {
 		DeviceManager.disconnect(type);
 	}
-	render(): React.ReactElement<any> {
+	render(): React.Element<any> {
 		let portStatus = DeviceManager.portStatus;
-		let ports: {[key: PortType]: PortData} = {
+		let ports: {[key: string]: PortData} = {
 			nspy: {
 				name: "NintendoSpy",
 				current: this.state.currentNSpyPort,
@@ -92,15 +101,20 @@ export default class StatusBar extends React.Component {
 				status: portStatus.msmd
 			}
 		};
-		let portBlock = type => {
+		let portBlock = (type: PortType) => {
 			let portList = <select disabled={true}><option>No serial devices found</option></select>;
 
 			if (ports[type].status === "notconnected") {
 				// Filter out ports that are already being used by other devices
-				let available = this.state.ports.filter(port =>
+				let available = this.state.ports.filter(port => {
 					// For each other port, check if they are connected and using that port name
-					Object.values(ports).filter(item => item.current === port.comName && item.status === "connected").length === 0
-				);
+					for (let ctype in ports) {
+						if (ports[ctype].current === port.comName && ports[ctype].status === "connected") {
+							return false;
+						}
+					}
+					return true;
+				});
 				
 				if (available.length > 0) {
 					portList = <select value={ports[type].current} onChange={(e) => this.setCurrentPort(type, e.target.value)}>
