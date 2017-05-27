@@ -17,7 +17,7 @@
 
 #statusbar .portBlock .title {
 	font-size: 9pt;
-	padding: 4pt;
+	padding: 0 4pt 7pt 4pt;
 	text-align: center;
 	text-transform: uppercase;
 }

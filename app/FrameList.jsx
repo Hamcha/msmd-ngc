@@ -57,7 +57,7 @@ export default class FrameList extends React.Component {
 				<button disabled={true}><i className="fa fa-save" /></button>
 				<span className="sep"></span>
 				<button disabled={true}><i className="fa fa-play" /></button>
-				<button><i className="fa fa-circle record" /></button>
+				<button disabled={true}><i className="fa fa-circle record" /></button>
 			</nav>
 			<div className="frameContainer">
 				{this.state.frames.map(frame => <FrameItem key={frame.ID} data={frame} />)}

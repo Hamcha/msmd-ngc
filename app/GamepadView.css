@@ -13,13 +13,13 @@
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 4pt;
+	top: 6pt;
 	padding: 0;
 	margin: 0;
 	text-transform: uppercase;
 	font-weight: normal;
 	letter-spacing: 2pt;
 	word-spacing: 4pt;
-	font-size: 9pt;
-	color: rgba(144, 171, 193, 0.62);
+	font-size: 10pt;
+	color: rgba(136, 152, 165, 0.62);
 }
