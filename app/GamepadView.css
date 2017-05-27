@@ -1,0 +1,25 @@
+.gamepadView {
+	display: flex;
+	flex: 1.5;
+	border: 1px solid #2d3a46;
+	border-image: linear-gradient(to top, #3a454e, #1b2733) 1 1;
+	background: linear-gradient(to bottom, #0e161d, #131b23);
+	margin: 2pt;
+	position: relative;
+}
+
+.gamepadView h3 {
+	text-align: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 4pt;
+	padding: 0;
+	margin: 0;
+	text-transform: uppercase;
+	font-weight: normal;
+	letter-spacing: 2pt;
+	word-spacing: 4pt;
+	font-size: 9pt;
+	color: rgba(144, 171, 193, 0.62);
+}

@@ -1,31 +1,40 @@
 .frameList {
-    border: 1px solid #2c3c4a;
-    border-radius: 3px;
+	border: 1px solid #2c3c4a;
+	border-radius: 3px;
 	flex: 1;
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	margin: 2pt;
 }
 
 .frameMenu {
 	background: linear-gradient(to bottom, #3c4f61, #2c3c4a);
-    padding: 3pt 5pt;
-    font-size: 10pt;
+	padding: 3pt 5pt;
+	font-size: 10pt;
 }
 
 .frameMenu button {
-    padding: 4pt 6pt;
+	padding: 4pt 6pt;
 }
 
 .frameMenu .title {
-    display: inline-block;
-    padding-right: 5pt;
-    margin-right: 3pt;
-    border-right: 1px solid #1b2f42;
+	display: inline-block;
+	padding: 0 3pt;
+}
+
+.frameMenu .sep {
+	margin: 0 3pt;
+	border-left: 1px solid rgba(67, 91, 113, 0.45);
+	border-right: 1px solid #1b2f42;
+}
+
+.frameMenu button i.record {
+	color: #e40b0b;
 }
 
 .frameContainer {
-    flex: 1;
-    background: linear-gradient(to bottom, #222e39, #2f3a44);
+	flex: 1;
+	background: linear-gradient(to bottom, #222e39, #2f3a44);
 }
 
 .frameItem {

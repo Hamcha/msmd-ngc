@@ -1,6 +1,7 @@
 @import "app/Controls.css";
 @import "app/StatusBar.css";
 @import "app/FrameList.css";
+@import "app/GamepadView.css";
 
 html, body, #root, main {
 	height: 100%;
