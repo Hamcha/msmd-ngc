@@ -9,21 +9,21 @@
 
 .frameMenu {
 	background: linear-gradient(to bottom, #3c4f61, #2c3c4a);
-	padding: 3pt 5pt;
+	padding: 3px 5px;
 	font-size: 10pt;
 }
 
 .frameMenu button {
-	padding: 4pt 6pt;
+	padding: 4px 6px;
 }
 
 .frameMenu .title {
 	display: inline-block;
-	padding: 0 3pt;
+	padding: 0 3px;
 }
 
 .frameMenu .sep {
-	margin: 0 3pt;
+	margin: 0 3px;
 	border-left: 1px solid rgba(67, 91, 113, 0.45);
 	border-right: 1px solid #1b2f42;
 }
@@ -34,8 +34,110 @@
 
 .frameContainer {
 	flex: 1;
+	overflow: auto;
 	background: linear-gradient(to bottom, #222e39, #2f3a44);
+	padding: 3px;
+	position: relative;
+}
+
+.frameContainer::-webkit-scrollbar-track
+{
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #222e39;
+}
+
+.frameContainer::-webkit-scrollbar
+{
+	width: 12px;
+	padding: 2px;
+	background-color: #222e39;
+}
+
+.frameContainer::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	box-shadow: inset 0 1px 1px rgba(78, 104, 128, 0.66);
+	background: linear-gradient(to bottom, #2c3c4a, #394c5d);
 }
 
 .frameItem {
+	background: linear-gradient(to bottom, #222e39, #2f3a44);
+}
+
+.fc_recording {
+	box-shadow: inset 0 0 100px rgba(140, 51, 67, 0.72);
+	border: 1px solid #bb3838;
+}
+
+.fc_recording:after {
+	position: absolute;
+	content: "● RECORDING";
+	bottom: 5pt;
+	left: 0; right: 0;
+	text-align: center;
+	letter-spacing: 2pt;
+	font-size: 11pt;
+	color: #f93d3d;
+}
+
+.frameItem {
+	display: flex;
+	align-items: center;
+}
+
+.frameItem .date {
+	font-size: 9pt;
+	padding: 0 9px 0 0;
+	padding-bottom: 0;
+	min-width: 50px;
+	text-align: right;
+	border-right: 1px solid rgba(13, 45, 68, 0.62);
+	margin: 8px 0;
+}
+
+.frameItem .btndata {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 0 5px;
+}
+
+.frameItem .btndata .btn {
+	font-size: 12pt;
+	padding: 3px;
+	color: rgba(255, 255, 255, 0.21);
+}
+
+.frameItem .btndata .btn.pressed {
+	color: #fff;
+}
+
+.frameItem .btndata .axis {
+	background: linear-gradient(to bottom, #506577, #566d82);
+	border-radius: 10px;
+	width: 20px;
+	height: 20px;
+	position: relative;
+	margin: 3px;
+	clip-path: polygon(50% 0, 85% 15%, 100% 50%, 85% 85%, 50% 100%, 15% 85%, 0 50%, 15% 15%);
+}
+
+.frameItem .btndata .axis .knob {
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	background: linear-gradient(to bottom, #658bad, #90a8bd);
+	border: 1px solid #90a8bd;
+	border-radius: 4px;
+}
+
+.frameItem .btndata .axis.cstick {
+	background: linear-gradient(to bottom, #776b50, #63493f);
+}
+
+.frameItem .btndata .axis.cstick .knob {
+	width: 6px;
+	height: 6px;
+	background: linear-gradient(to bottom, #bf9d3c, #c7b983);
+	border-color: #ead8c0;
 }

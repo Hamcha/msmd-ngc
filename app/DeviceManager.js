@@ -11,8 +11,8 @@ export type ConnectionStatus = "notconnected" | "connected" | "connecting";
 
 let serialOptions: {[key: PortType]: Object} = {
 	nspy: {
-		parser: SerialPort.parsers.readline("\n"),
-		baudRate: 9600
+		parser: SerialPort.parsers.byteDelimiter([10]),
+		baudRate: 115200
 	},
 	msmd: {
 		parser: SerialPort.parsers.readline("\n")
@@ -31,17 +31,19 @@ class DeviceManager extends EventEmitter {
 		this.devices[type] = new SerialPort(path, serialOptions[type]);
 		this.portStatus[type] = "connecting";
 
-		// Relay events
-		this.relayEvents(type, ["open", "close", "data", "error", "disconnect"]);
+		// Relay data event
+		this.devices[type].on("data", (data) => this.emit("data", type, data, this.devices[type]));
 		
 		// Set connected status once opened
 		this.devices[type].once("open", () => {
 			this.portStatus[type] = "connected";
 		});
 		// Remove from device list once connection is lost
-		this.devices[type].once("close", () => {
-			delete(this.devices[type]);
-			this.portStatus[type] = "notconnected";
+		this.devices[type].once("close", this.deletePort.bind(this, type));
+		// Handle errors somehow (TODO replace with an actual solution)
+		this.devices[type].once("error", (err) => {
+			alert(err);
+			this.disconnect(type);
 		});
 	}
 
@@ -49,8 +51,9 @@ class DeviceManager extends EventEmitter {
 		this.devices[type].close();
 	}
 
-	relayEvents(type: PortType, events: string[]) {
-		events.forEach((event) => this.devices[type].on(event, () => this.emit(event, type, this.devices[type])));
+	deletePort(type: PortType) {
+		delete(this.devices[type]);
+		this.portStatus[type] = "notconnected";
 	}
 
 	// Async util methods

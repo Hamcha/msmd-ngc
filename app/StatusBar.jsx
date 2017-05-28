@@ -103,10 +103,10 @@ export default class StatusBar extends React.Component {
 		};
 		let portBlock = (type: PortType) => {
 			let portList = <select disabled={true}><option>No serial devices found</option></select>;
-
+			let available = [];
 			if (ports[type].status === "notconnected") {
 				// Filter out ports that are already being used by other devices
-				let available = this.state.ports.filter(port => {
+				available = this.state.ports.filter(port => {
 					// For each other port, check if they are connected and using that port name
 					for (let ctype in ports) {
 						if (ports[ctype].current === port.comName && ports[ctype].status === "connected") {
@@ -135,7 +135,7 @@ export default class StatusBar extends React.Component {
 					connectBtn = <button disabled={true}>Connecting…</button>;
 					break;
 				case "notconnected":
-					connectBtn = <button disabled={ports[type].current === null} onClick={this.connect.bind(this, type)}>Connect</button>;
+					connectBtn = <button disabled={available.length === 0} onClick={this.connect.bind(this, type)}>Connect</button>;
 					break;
 				default:
 					throw "unknown connection status type: " + ports[type].status;
