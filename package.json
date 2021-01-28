@@ -14,7 +14,7 @@
   "author": "Hamcha <zikyky@gmail.com>",
   "license": "WTFPL",
   "devDependencies": {
-    "electron": "^1.6.10",
+    "electron": "^9.4.0",
     "electron-rebuild": "^1.5.11",
     "electron-reload": "^1.2.0",
     "mz": "^2.6.0"
